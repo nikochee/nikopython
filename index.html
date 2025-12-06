@@ -30,7 +30,6 @@
             background-repeat: no-repeat;
             background-attachment: fixed;
             
-            /* DİQQƏT: PC-də mərkəzləşdirmə üçün FLEX sətirləri SİLİNDİ! */
             padding-top: 20px;
         }
 
@@ -38,11 +37,12 @@
             background: #1e1e1e;
             padding: 40px 20px; 
             border-radius: 20px;
-            max-width: 900px; /* PC ÜÇÜN GENİŞLİK */
-            width: 90%; /* TELEFON ÜÇÜN */
+            max-width: 900px; 
+            width: 90%; 
             text-align: center;
             box-sizing: border-box; 
-            margin: 0 auto; /* <--- PC-də tam mərkəzləşdirmənin açarı! */
+            /* Səhv 18-ci Sətir Buradadır, Nöqtəli Vergül Düzəldildi */
+            margin: 0 auto; 
             margin-bottom: 50px; 
         }
         
@@ -78,16 +78,15 @@
         .product:hover {
             transform: scale(1.03);
         }
-
-        .product .product-img {
-            /* Şəkil yolu düzgün olsa da, faylın Git-də olduğuna əmin olun */
-            width: 100%;
-            height: auto;
-            max-height: 400px;
-            object-fit: cover;
-            border-radius: 15px 15px 0 0;
-        }
-
+.product .product-img {
+    width: 100%;
+    /* Hündürlüyü 450px-ə qaldırırıq */
+    height: 450px; 
+    object-fit: cover; 
+    /* Yenidən mərkəzə qoyuruq ki, hər tərəfdən bərabər kəsilsin */
+    object-position: center center; 
+    border-radius: 15px 15px 0 0;
+}
         .product-info-overlay {
             padding: 15px 20px;
             text-align: center;
@@ -284,7 +283,67 @@
             color: #121212;
             border-color: #03dac6;
         }
+/* ========================================= */
+/* 7. MOBİL UYĞUNLUQ (RESPONSIVENESS) STİLLƏRİ */
+/* ========================================= */
 
+@media (max-width: 768px) {
+    /* 768px-dən kiçik ekranlar üçün (əsasən tabletlər) */
+    .container {
+        padding: 20px 10px;
+        width: 95%;
+    }
+    
+    h1 {
+        font-size: 28px; /* Başlıq ölçüsü kiçilir */
+    }
+    
+    .welcome {
+        font-size: 16px;
+    }
+    
+    .product .product-img {
+        /* Mobil telefonlarda şəklin hündürlüyünü azaldırıq */
+        height: 250px;
+    }
+    
+    .product-info-overlay h2 {
+        font-size: 20px;
+    }
+    
+    .social-sidebar {
+        /* Sosial ikonkaları mobil görünüşdə yuxarı çəkirik */
+        top: 10px;
+        transform: translateY(0);
+        right: 10px;
+        gap: 5px;
+        flex-direction: row; /* İkonlar alt-alta deyil, yan-yana düzülür */
+    }
+    
+    .social-sidebar a {
+        font-size: 18px;
+        width: 36px;
+        height: 36px;
+        padding: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* 480px-dən kiçik ekranlar üçün (əsasən telefonlar) */
+    .scrolling-images-container {
+        padding: 5px 0;
+    }
+    
+    .scroll-image {
+        width: 150px; /* Sürüşən şəkillər kiçilir */
+        height: 100px;
+    }
+    
+    .download-btn {
+        padding: 12px 30px;
+        font-size: 18px;
+    }
+}
         .support p { color: #ffffff; margin-top: 5px; font-size: 15px; }
         .support a { color: #bb86fc !important; text-decoration: none; font-weight: bold; }
 
@@ -405,6 +464,21 @@
     </script>
     
     <script>
+        // Keş problemi üçün skript: səhifəni avtomatik olaraq yeniləyir.
+        function clearCacheForImages() {
+            const images = document.querySelectorAll('img');
+            const timestamp = Date.now();
+            images.forEach(img => {
+                // images/ ilə başlayan bütün şəkil yollarına timestamp əlavə edir.
+                if (img.src.includes('images/') && !img.src.includes('?v=')) {
+                    img.src = img.src + '?v=' + timestamp;
+                }
+            });
+        }
+        // Səhifə yüklənəndə çağırılır
+        clearCacheForImages();
+
+
         const stripe = Stripe('pk_test_YourPublicKeyHereFromStripe'); 
         let elements, paymentElement, currentProduct, currentPrice;
         function openModal(product, price) {
